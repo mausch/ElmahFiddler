@@ -8,21 +8,25 @@ namespace ElmahFiddler {
         public object Create(object parent, object configContext, XmlNode section) {
             var moduleConfig = new ElmahMailSAZConfig();
 
-            var excludes = section.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "exclude");
+            var excludes = GetChild(section, "exclude");
             if (excludes != null) {
                 foreach (XmlNode n in excludes.ChildNodes)
                     moduleConfig.ExcludedUrls.Add(new Regex(n.InnerText, RegexOptions.Compiled | RegexOptions.IgnoreCase));
             }
 
-            var password = section.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "password");
+            var password = GetChild(section, "password");
             if (password != null)
                 moduleConfig.Password = password.InnerText;
 
-            var keepLastNRequests = section.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "keepLastNRequests");
+            var keepLastNRequests = GetChild(section, "keepLastNRequests");
             if (keepLastNRequests != null)
                 moduleConfig.KeepLastNRequests = int.Parse(keepLastNRequests.InnerText);
 
             return moduleConfig;
+        }
+
+        private XmlNode GetChild(XmlNode node, string name) {
+            return node.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == name);
         }
     }
 }
