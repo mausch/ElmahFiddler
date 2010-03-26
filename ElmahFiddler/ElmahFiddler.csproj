@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ElmahMailSAZConfig.cs" />
     <Compile Include="ElmahMailSAZModule.cs" />
+    <Compile Include="ElmahMailSAZSectionHandler.cs" />
     <Compile Include="ElmahMailSAZTraceModule.cs" />
     <Compile Include="HttpRequestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

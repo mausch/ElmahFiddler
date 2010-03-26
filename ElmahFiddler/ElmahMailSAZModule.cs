@@ -1,16 +1,13 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
-using System.Text.RegularExpressions;
 using System.Web;
-using System.Xml;
 using Elmah;
 using Fiddler;
 
 namespace ElmahFiddler {
-    public class ElmahMailSAZModule : IHttpModule, IConfigurationSectionHandler {
+    public class ElmahMailSAZModule : IHttpModule {
         private static readonly object sazFilenameKey = new object();
         private static readonly object attachmentKey = new object();
         private ElmahMailSAZConfig config;
@@ -56,18 +53,5 @@ namespace ElmahFiddler {
         }
 
         public void Dispose() {}
-
-        public object Create(object parent, object configContext, XmlNode section) {
-            var moduleConfig = new ElmahMailSAZConfig();
-            var excludes = section.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "exclude");
-            if (excludes != null) {
-                foreach (XmlNode n in excludes.ChildNodes)
-                    moduleConfig.ExcludedUrls.Add(new Regex(n.InnerText, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            var password = section.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "password");
-            if (password != null)
-                moduleConfig.Password = password.InnerText;
-            return moduleConfig;
-        }
     }
 }
