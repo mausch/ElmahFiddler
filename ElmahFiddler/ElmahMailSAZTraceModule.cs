@@ -67,7 +67,11 @@ namespace ElmahFiddler {
             var filename = Path.GetTempFileName();
             var sessions = ((IEnumerable<byte[]>) HttpContext.Current.Session[sessionKey]).Select(b => new Session(b, null)).ToArray();
             var ok = SAZ.WriteSessionArchive(filename, sessions, config.Password);
-            return ok ? filename : null;
+            if (!ok) {
+                File.Delete(filename);
+                return null;
+            }
+            return filename;
         }
 
         public void Dispose() {}
