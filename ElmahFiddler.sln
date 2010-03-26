@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElmahFiddlerApp", "ElmahFiddler\ElmahFiddlerApp.csproj", "{6F0B4CD6-DB63-4A82-A0B3-39F21ABBA717}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElmahFiddlerApp", "ElmahFiddlerApp\ElmahFiddlerApp.csproj", "{6F0B4CD6-DB63-4A82-A0B3-39F21ABBA717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
