@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Net.Mail;
 using System.Web;
-using Elmah;
-using Fiddler;
 
-namespace ElmahFiddler {
+namespace ElmahFiddlerApp {
     public class Global : HttpApplication {
         protected void Application_Start(object sender, EventArgs e) {}
 

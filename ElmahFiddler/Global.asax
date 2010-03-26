@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="ElmahFiddler.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="ElmahFiddlerApp.Global" Language="C#" %>
