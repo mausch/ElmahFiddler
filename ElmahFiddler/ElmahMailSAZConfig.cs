@@ -6,6 +6,8 @@ namespace ElmahFiddler {
         public string Password { get; set; }
         public IList<Regex> ExcludedUrls { get; private set; }
         public int? KeepLastNRequests { get; set; }
+        public string RenameHost { get; set; }
+
         public ElmahMailSAZConfig() {
             ExcludedUrls = new List<Regex>();
         }

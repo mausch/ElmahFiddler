@@ -22,6 +22,10 @@ namespace ElmahFiddler {
             if (keepLastNRequests != null)
                 moduleConfig.KeepLastNRequests = int.Parse(keepLastNRequests.InnerText);
 
+            var renameHost = GetChild(section, "renameHost");
+            if (renameHost != null)
+                moduleConfig.RenameHost = renameHost.InnerText;
+
             return moduleConfig;
         }
 
