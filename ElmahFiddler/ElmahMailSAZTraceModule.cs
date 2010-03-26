@@ -35,7 +35,10 @@ namespace ElmahFiddler {
             if (!(app.Context.CurrentHandler is IRequiresSessionState))
                 return;
             var req = app.Request.SerializeRequestToBytes();
-            ((List<byte[]>)app.Session[sessionKey]).Add(req);
+            var reqs = ((List<byte[]>)app.Session[sessionKey]);
+            reqs.Add(req);
+            if (config.KeepLastNRequests.HasValue && reqs.Count > config.KeepLastNRequests)
+                reqs.RemoveAt(0);
         }
 
         private void SessionStart(object sender, EventArgs e) {
