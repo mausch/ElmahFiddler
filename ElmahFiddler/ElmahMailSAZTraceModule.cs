@@ -50,23 +50,29 @@ namespace ElmahFiddler {
         }
 
         public void MailModuleMailed(object sender, ErrorMailEventArgs args) {
-            var saz = HttpContext.Current.Items[sazFilenameKey] as string;
+            var context = HttpContext.Current;
+            if (context == null)
+                return;
+            var saz = context.Items[sazFilenameKey] as string;
             if (saz == null)
                 return;
-            var attachment = HttpContext.Current.Items[attachmentKey] as Attachment;
+            var attachment = context.Items[attachmentKey] as Attachment;
             attachment.Dispose();
             File.Delete(saz);
         }
 
         public void MailModuleMailing(object sender, ErrorMailEventArgs args) {
+            var context = HttpContext.Current;
+            if (context == null)
+                return;
             var saz = SerializeRequestToSAZ();
             if (saz == null)
                 return;
             var saz2 = saz + ".saz";
             File.Move(saz, saz2);
             var attachment = new Attachment(saz2);
-            HttpContext.Current.Items[sazFilenameKey] = saz2;
-            HttpContext.Current.Items[attachmentKey] = attachment;
+            context.Items[sazFilenameKey] = saz2;
+            context.Items[attachmentKey] = attachment;
             args.Mail.Attachments.Add(attachment);
         }
 

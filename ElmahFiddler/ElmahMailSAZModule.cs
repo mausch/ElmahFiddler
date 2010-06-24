@@ -23,16 +23,22 @@ namespace ElmahFiddler {
         }
 
         public void MailModuleMailed(object sender, ErrorMailEventArgs args) {
-            var saz = HttpContext.Current.Items[sazFilenameKey] as string;
+            var context = HttpContext.Current;
+            if (context == null)
+                return;
+            var saz = context.Items[sazFilenameKey] as string;
             if (saz == null)
                 return;
-            var attachment = HttpContext.Current.Items[attachmentKey] as Attachment;
+            var attachment = context.Items[attachmentKey] as Attachment;
             attachment.Dispose();
             File.Delete(saz);
         }
 
         public void MailModuleMailing(object sender, ErrorMailEventArgs args) {
-            if (config.ExcludedUrls.Any(rx => rx.IsMatch(HttpContext.Current.Request.RawUrl)))
+            var context = HttpContext.Current;
+            if (context == null)
+                return;
+            if (config.ExcludedUrls.Any(rx => rx.IsMatch(context.Request.RawUrl)))
                 return;
             var saz = SerializeRequestToSAZ();
             if (saz == null)
@@ -40,8 +46,8 @@ namespace ElmahFiddler {
             var saz2 = saz + ".saz";
             File.Move(saz, saz2);
             var attachment = new Attachment(saz2);
-            HttpContext.Current.Items[sazFilenameKey] = saz2;
-            HttpContext.Current.Items[attachmentKey] = attachment;
+            context.Items[sazFilenameKey] = saz2;
+            context.Items[attachmentKey] = attachment;
             args.Mail.Attachments.Add(attachment);
         }
 
