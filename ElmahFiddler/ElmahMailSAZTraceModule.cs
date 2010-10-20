@@ -20,7 +20,7 @@ namespace ElmahFiddler {
             var modules = from string n in context.Modules select context.Modules[n];
             var mailModule = modules.FirstOrDefault(m => m is ErrorMailModule) as ErrorMailModule;
             if (mailModule == null)
-                return;
+                throw new Exception(string.Format("{0} requires {1} to be installed before it", GetType().Name, typeof(ErrorMailModule).Name));
             ((SessionStateModule) context.Modules["Session"]).Start += SessionStart;
             context.PreRequestHandlerExecute += PreRequestHandlerExecute;
             config = (ElmahMailSAZConfig) ConfigurationManager.GetSection("elmah/errorMailSAZ") ?? new ElmahMailSAZConfig();
