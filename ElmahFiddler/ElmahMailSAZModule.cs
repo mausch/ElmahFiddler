@@ -31,7 +31,8 @@ namespace ElmahFiddler {
             if (saz == null)
                 return;
             var attachment = context.Items[attachmentKey] as Attachment;
-            attachment.Dispose();
+            if (attachment != null)
+                attachment.Dispose();
             File.Delete(saz);
         }
 
