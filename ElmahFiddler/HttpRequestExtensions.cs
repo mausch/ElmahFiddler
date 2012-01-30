@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Collections.Specialized;
 
 namespace ElmahFiddler {
     public static class HttpRequestExtensions {
@@ -25,8 +26,9 @@ namespace ElmahFiddler {
 
         public static byte[] SerializeRequestToBytes(this HttpRequest request, string renameHost) {
             return SerializeRequestToBytes(request, r => {
-                r.Headers["Host"] = renameHost;
-                var headers = r.Headers.Cast<string>()
+                var requestHeaders = new NameValueCollection(r.Headers);
+                requestHeaders["Host"] = renameHost;
+                var headers = requestHeaders.Cast<string>()
                     .Select(h => string.Format("{0}: {1}", h, r.Headers[h]))
                     .ToArray();
                 return string.Join(Environment.NewLine, headers);
