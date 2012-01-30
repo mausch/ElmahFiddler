@@ -16,12 +16,24 @@ namespace ElmahFiddler {
         private static readonly string sessionKey = "ElmahMailSAZTraceModule" + Guid.NewGuid();
         private ElmahMailSAZConfig config;
 
+        private static SessionStateModule GetSessionStateModule(HttpApplication app) {
+            var m = app.Modules["Session"];
+            if (m == null)
+                return null;
+            if (!(m is SessionStateModule))
+                return null;
+            return (SessionStateModule) m;
+        }
+
         public void Init(HttpApplication context) {
             var modules = from string n in context.Modules select context.Modules[n];
             var mailModule = modules.FirstOrDefault(m => m is ErrorMailModule) as ErrorMailModule;
             if (mailModule == null)
                 throw new Exception(string.Format("{0} requires {1} to be installed before it", GetType().Name, typeof(ErrorMailModule).Name));
-            ((SessionStateModule) context.Modules["Session"]).Start += SessionStart;
+            var sessionStateModule = GetSessionStateModule(context);
+            if (sessionStateModule == null)
+                throw new Exception(string.Format("{0} requires ASP.NET session", GetType().Name));
+            sessionStateModule.Start += SessionStart;
             context.PreRequestHandlerExecute += PreRequestHandlerExecute;
             config = (ElmahMailSAZConfig) ConfigurationManager.GetSection("elmah/errorMailSAZ") ?? new ElmahMailSAZConfig();
             mailModule.Mailing += MailModuleMailing;
