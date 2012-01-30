@@ -26,6 +26,10 @@ namespace ElmahFiddler {
             var context = HttpContext.Current;
             if (context == null)
                 return;
+            MailModuleMailed(new HttpContextWrapper(context));
+        }
+
+        public static void MailModuleMailed(HttpContextBase context) {
             var saz = context.Items[sazFilenameKey] as string;
             if (saz == null)
                 return;
@@ -39,22 +43,28 @@ namespace ElmahFiddler {
             var context = HttpContext.Current;
             if (context == null)
                 return;
+            var attachment = MailModuleMailing(config, new HttpContextWrapper(context));
+            if (attachment != null)
+                args.Mail.Attachments.Add(attachment);
+        }
+
+        public static Attachment MailModuleMailing(ElmahMailSAZConfig config, HttpContextBase context) {
             if (config.ExcludedUrls.Any(rx => rx.IsMatch(context.Request.RawUrl)))
-                return;
-            var saz = SerializeRequestToSAZ();
+                return null;
+            var saz = SerializeRequestToSAZ(config, context.Request);
             if (saz == null)
-                return;
+                return null;
             var saz2 = saz + ".saz";
             File.Move(saz, saz2);
             var attachment = new Attachment(saz2);
             context.Items[sazFilenameKey] = saz2;
             context.Items[attachmentKey] = attachment;
-            args.Mail.Attachments.Add(attachment);
+            return attachment;
         }
 
-        public string SerializeRequestToSAZ() {
+        public static string SerializeRequestToSAZ(ElmahMailSAZConfig config, HttpRequestBase request) {
             var filename = Path.GetTempFileName();
-            var session = new Session(HttpContext.Current.Request.SerializeRequestToBytes(), null);
+            var session = new Session(request.SerializeRequestToBytes(), null);
             var ok = SAZ.WriteSessionArchive(filename, new[] {session}, config.Password);
             if (!ok) {
                 File.Delete(filename);

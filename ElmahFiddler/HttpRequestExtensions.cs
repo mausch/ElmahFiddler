@@ -6,11 +6,11 @@ using System.Collections.Specialized;
 
 namespace ElmahFiddler {
     public static class HttpRequestExtensions {
-        public static byte[] SerializeRequestToBytes(this HttpRequest request) {
+        public static byte[] SerializeRequestToBytes(this HttpRequestBase request) {
             return SerializeRequestToBytes(request, r => r.ServerVariables["ALL_RAW"]);
         }
 
-        private static byte[] SerializeRequestToBytes(HttpRequest request, Func<HttpRequest, string> getHeaders) {
+        private static byte[] SerializeRequestToBytes(HttpRequestBase request, Func<HttpRequestBase, string> getHeaders) {
             using (var ms = new MemoryStream())
             using (var sw = new StreamWriter(ms)) {
                 sw.WriteLine("{0} {1} {2}", request.HttpMethod, request.Url.PathAndQuery, request.ServerVariables["SERVER_PROTOCOL"]);
@@ -24,7 +24,7 @@ namespace ElmahFiddler {
             }
         }
 
-        public static byte[] SerializeRequestToBytes(this HttpRequest request, string renameHost) {
+        public static byte[] SerializeRequestToBytes(this HttpRequestBase request, string renameHost) {
             return SerializeRequestToBytes(request, r => {
                 var requestHeaders = new NameValueCollection(r.Headers);
                 requestHeaders["Host"] = renameHost;

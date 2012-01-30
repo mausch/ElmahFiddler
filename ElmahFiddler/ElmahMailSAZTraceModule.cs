@@ -45,18 +45,31 @@ namespace ElmahFiddler {
                 return;
             if (!(app.Context.CurrentHandler is IRequiresSessionState))
                 return;
-            byte[] req;
-            if (string.IsNullOrEmpty(config.RenameHost)) 
-                req = app.Request.SerializeRequestToBytes();
-            else 
-                req = app.Request.SerializeRequestToBytes(config.RenameHost);
-            var reqs = ((List<byte[]>)app.Session[sessionKey]);
+            var req = SerializeRequest(config, new HttpContextWrapper(app.Context));
+            if (req == null)
+                return;
+            AddRequestToSession(req, config, new HttpSessionStateWrapper(app.Session));
+        }
+
+        public static void AddRequestToSession(byte[] req, ElmahMailSAZConfig config, HttpSessionStateBase session) {
+            var reqs = ((List<byte[]>)session[sessionKey]);
             reqs.Add(req);
             if (config.KeepLastNRequests.HasValue && reqs.Count > config.KeepLastNRequests)
                 reqs.RemoveAt(0);
         }
 
-        private void SessionStart(object sender, EventArgs e) {
+        public static byte[] SerializeRequest(ElmahMailSAZConfig config, HttpContextBase context) {
+            var request = context.Request;
+            if (config.ExcludedUrls.Any(rx => rx.IsMatch(request.RawUrl)))
+                return null;
+            if (!(context.CurrentHandler is IRequiresSessionState))
+                return null;
+            if (string.IsNullOrEmpty(config.RenameHost))
+                return request.SerializeRequestToBytes();
+            return request.SerializeRequestToBytes(config.RenameHost);
+        }
+
+        private static void SessionStart(object sender, EventArgs e) {
             HttpContext.Current.Session[sessionKey] = new List<byte[]>();
         }
 
@@ -68,7 +81,8 @@ namespace ElmahFiddler {
             if (saz == null)
                 return;
             var attachment = context.Items[attachmentKey] as Attachment;
-            attachment.Dispose();
+            if (attachment != null)
+                attachment.Dispose();
             File.Delete(saz);
         }
 
@@ -76,26 +90,32 @@ namespace ElmahFiddler {
             var context = HttpContext.Current;
             if (context == null)
                 return;
-            var saz = SerializeRequestToSAZ();
+            var attachment = MailModuleMailing(new HttpContextWrapper(context), config);
+            if (attachment != null)
+                args.Mail.Attachments.Add(attachment);
+        }
+
+        public static Attachment MailModuleMailing(HttpContextBase context, ElmahMailSAZConfig config) {
+            var saz = SerializeRequestToSAZ(context.Session, config);
             if (saz == null)
-                return;
+                return null;
             var saz2 = saz + ".saz";
             File.Move(saz, saz2);
             var attachment = new Attachment(saz2);
             context.Items[sazFilenameKey] = saz2;
             context.Items[attachmentKey] = attachment;
-            args.Mail.Attachments.Add(attachment);
+            return attachment;
         }
 
-        public string SerializeRequestToSAZ() {
+        public static string SerializeRequestToSAZ(HttpSessionStateBase session, ElmahMailSAZConfig config) {
             var filename = Path.GetTempFileName();
-            var sessions = ((IEnumerable<byte[]>) HttpContext.Current.Session[sessionKey]).Select(b => new Session(b, null)).ToArray();
+            var sessions = ((IEnumerable<byte[]>)HttpContext.Current.Session[sessionKey]).Select(b => new Session(b, null)).ToArray();
             var ok = SAZ.WriteSessionArchive(filename, sessions, config.Password);
             if (!ok) {
                 File.Delete(filename);
                 return null;
             }
-            return filename;
+            return filename;            
         }
 
         public void Dispose() {}
