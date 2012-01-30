@@ -35,8 +35,8 @@
     <Reference Include="Elmah">
       <HintPath>..\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="FiddlerCore">
-      <HintPath>..\lib\FiddlerCore.dll</HintPath>
+    <Reference Include="FiddlerCore4">
+      <HintPath>..\lib\FiddlerCore4.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
