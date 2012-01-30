@@ -26,8 +26,7 @@ namespace ElmahFiddler {
         }
 
         public void Init(HttpApplication context) {
-            var modules = from string n in context.Modules select context.Modules[n];
-            var mailModule = modules.FirstOrDefault(m => m is ErrorMailModule) as ErrorMailModule;
+            var mailModule = context.Modules.AsEnumerable().OfType<ErrorMailModule>().FirstOrDefault();
             if (mailModule == null)
                 throw new Exception(string.Format("{0} requires {1} to be installed before it", GetType().Name, typeof(ErrorMailModule).Name));
             var sessionStateModule = GetSessionStateModule(context);

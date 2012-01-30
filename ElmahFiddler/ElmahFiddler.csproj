@@ -53,6 +53,7 @@
     <Compile Include="ElmahMailSAZModule.cs" />
     <Compile Include="ElmahMailSAZSectionHandler.cs" />
     <Compile Include="ElmahMailSAZTraceModule.cs" />
+    <Compile Include="HttpModuleCollectionExtensions.cs" />
     <Compile Include="HttpRequestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SAZ.cs" />
