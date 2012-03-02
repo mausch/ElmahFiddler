@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>FiddlerCore4</name>
+        <name>FiddlerCore</name>
     </assembly>
     <members>
         <member name="T:Fiddler.WinINETCache">
@@ -2220,9 +2220,8 @@
         </member>
         <member name="F:Fiddler.DefaultCertificateProvider._oRWLock">
             <summary>
-            Reader/Writer lock gates access to the certificate cache and generation functions.
+            Reader/Writer lock gates access to the certificate cache and generation functions
             </summary>
-            <remarks>We must set the SupportsRecursion flag because there are cases where the thread holds the lock in Write mode and then enters Read mode in a nested call.</remarks>
         </member>
         <member name="M:Fiddler.DefaultCertificateProvider.#ctor">
             <summary>
