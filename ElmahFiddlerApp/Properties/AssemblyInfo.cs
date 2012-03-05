@@ -5,12 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ElmahFiddler")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ElmahFiddlerApp")]
+[assembly: AssemblyDescription("ElmahFiddler sample app")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ElmahFiddler")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyProduct("ElmahFiddlerApp")]
+[assembly: AssemblyCopyright("Copyright © Mauricio Scheffer 2010-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
