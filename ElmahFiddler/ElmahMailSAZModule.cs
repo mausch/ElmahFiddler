@@ -64,7 +64,7 @@ namespace ElmahFiddler {
 
         public static string SerializeRequestToSAZ(ElmahMailSAZConfig config, HttpRequestBase request) {
             var filename = Path.GetTempFileName();
-            var session = new Session(request.SerializeRequestToBytes(), null);
+            var session = new Session(request.SerializeRequestToBytes(config.RenameHost), null);
             var ok = SAZ.WriteSessionArchive(filename, new[] {session}, config.Password);
             if (!ok) {
                 File.Delete(filename);

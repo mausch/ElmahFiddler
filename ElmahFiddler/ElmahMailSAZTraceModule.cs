@@ -64,8 +64,6 @@ namespace ElmahFiddler {
                 return null;
             if (!(context.CurrentHandler is IRequiresSessionState))
                 return null;
-            if (string.IsNullOrEmpty(config.RenameHost))
-                return request.SerializeRequestToBytes();
             return request.SerializeRequestToBytes(config.RenameHost);
         }
 

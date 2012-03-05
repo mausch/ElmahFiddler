@@ -25,6 +25,8 @@ namespace ElmahFiddler {
         }
 
         public static byte[] SerializeRequestToBytes(this HttpRequestBase request, string renameHost) {
+            if (string.IsNullOrEmpty(renameHost))
+                return SerializeRequestToBytes(request);
             return SerializeRequestToBytes(request, r => {
                 var requestHeaders = new NameValueCollection(r.Headers);
                 requestHeaders["Host"] = renameHost;
