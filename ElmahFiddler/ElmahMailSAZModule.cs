@@ -30,6 +30,8 @@ namespace ElmahFiddler {
         }
 
         public static void MailModuleMailed(HttpContextBase context) {
+            if (context == null)
+                throw new ArgumentNullException("context");
             var saz = context.Items[sazFilenameKey] as string;
             if (saz == null)
                 return;
@@ -49,6 +51,10 @@ namespace ElmahFiddler {
         }
 
         public static Attachment MailModuleMailing(ElmahMailSAZConfig config, HttpContextBase context) {
+            if (config == null)
+                throw new ArgumentNullException("config");
+            if (context == null)
+                throw new ArgumentNullException("context");
             if (config.ExcludedUrls.Any(rx => rx.IsMatch(context.Request.RawUrl)))
                 return null;
             var saz = SerializeRequestToSAZ(config, context.Request);
@@ -63,6 +69,10 @@ namespace ElmahFiddler {
         }
 
         public static string SerializeRequestToSAZ(ElmahMailSAZConfig config, HttpRequestBase request) {
+            if (config == null)
+                throw new ArgumentNullException("config");
+            if (request == null)
+                throw new ArgumentNullException("request");
             var filename = Path.GetTempFileName();
             var session = new Session(request.SerializeRequestToBytes(config.RenameHost), null);
             var ok = SAZ.WriteSessionArchive(filename, new[] {session}, config.Password);

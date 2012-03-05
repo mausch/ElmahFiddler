@@ -59,6 +59,10 @@ namespace ElmahFiddler {
         }
 
         public static byte[] SerializeRequest(ElmahMailSAZConfig config, HttpContextBase context) {
+            if (config == null)
+                throw new ArgumentNullException("config");
+            if (context == null)
+                throw new ArgumentNullException("context");
             var request = context.Request;
             if (config.ExcludedUrls.Any(rx => rx.IsMatch(request.RawUrl)))
                 return null;
