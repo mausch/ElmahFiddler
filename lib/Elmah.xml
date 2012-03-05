@@ -337,6 +337,12 @@
             applicable during development.
             </summary>
         </member>
+        <member name="M:Elmah.Environment.TryGetMachineName(System.Web.HttpContext,System.String)">
+            <remarks>
+            If <paramref name="unknownName"/> is a null reference then this
+            method will still return an empty string.
+            </remarks>
+        </member>
         <member name="T:Elmah.Error">
             <summary>
             Represents a logical application error (as opposed to the actual 
@@ -1385,6 +1391,56 @@
             Logs an exception and its context to the error log.
             </summary>
         </member>
+        <member name="T:Elmah.MySqlErrorLog">
+            <summary>
+            An <see cref="T:Elmah.ErrorLog"/> implementation that uses 
+            <a href="http://www.mysql.com/">MySQL</a> as its backing store.
+            </summary>
+        </member>
+        <member name="M:Elmah.MySqlErrorLog.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlErrorLog"/> class
+            using a dictionary of configured settings.
+            </summary>
+        </member>
+        <member name="M:Elmah.MySqlErrorLog.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlErrorLog"/> class
+            to use a specific connection string for connecting to the database.
+            </summary>
+        </member>
+        <member name="M:Elmah.MySqlErrorLog.Log(Elmah.Error)">
+            <summary>
+            Logs an error to the database.
+            </summary>
+            <remarks>
+            Use the stored procedure called by this implementation to set a
+            policy on how long errors are kept in the log. The default
+            implementation stores all errors for an indefinite time.
+            </remarks>
+        </member>
+        <member name="M:Elmah.MySqlErrorLog.GetErrors(System.Int32,System.Int32,System.Collections.IList)">
+            <summary>
+            Returns a page of errors from the databse in descending order 
+            of logged time.
+            </summary>
+        </member>
+        <member name="M:Elmah.MySqlErrorLog.GetError(System.String)">
+            <summary>
+            Returns the specified error from the database, or null 
+            if it does not exist.
+            </summary>
+        </member>
+        <member name="P:Elmah.MySqlErrorLog.Name">
+            <summary>
+            Gets the name of this error log implementation.
+            </summary>
+        </member>
+        <member name="P:Elmah.MySqlErrorLog.ConnectionString">
+            <summary>
+            Gets the connection string used by the log to connect to the database.
+            </summary>
+        </member>
         <member name="T:Elmah.OracleErrorLog">
             <summary>
             An <see cref="T:Elmah.ErrorLog"/> implementation that uses Oracle as its backing store.
@@ -1400,6 +1456,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:Elmah.OracleErrorLog"/> class
             to use a specific connection string for connecting to the database.
+            </summary>
+        </member>
+        <member name="M:Elmah.OracleErrorLog.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.OracleErrorLog"/> class
+            to use a specific connection string for connecting to the database and
+            a specific schema owner.
             </summary>
         </member>
         <member name="M:Elmah.OracleErrorLog.Log(Elmah.Error)">
@@ -1424,12 +1487,46 @@
             if it does not exist.
             </summary>
         </member>
+        <member name="P:Elmah.OracleErrorLog.SchemaOwner">
+            <summary>
+            Gets the name of the schema owner where the errors are being stored.
+            </summary>
+        </member>
         <member name="P:Elmah.OracleErrorLog.Name">
             <summary>
             Gets the name of this error log implementation.
             </summary>
         </member>
         <member name="P:Elmah.OracleErrorLog.ConnectionString">
+            <summary>
+            Gets the connection string used by the log to connect to the database.
+            </summary>
+        </member>
+        <member name="T:Elmah.PgsqlErrorLog">
+            <summary>
+            An <see cref="T:Elmah.ErrorLog"/> implementation that uses PostgreSQL
+            as its backing store.
+            </summary>
+            
+        </member>
+        <member name="M:Elmah.PgsqlErrorLog.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlErrorLog"/> class
+            using a dictionary of configured settings.
+            </summary>
+        </member>
+        <member name="M:Elmah.PgsqlErrorLog.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlErrorLog"/> class
+            to use a specific connection string for connecting to the database.
+            </summary>
+        </member>
+        <member name="P:Elmah.PgsqlErrorLog.Name">
+            <summary>
+            Gets the name of this error log implementation.
+            </summary>
+        </member>
+        <member name="P:Elmah.PgsqlErrorLog.ConnectionString">
             <summary>
             Gets the connection string used by the log to connect to the database.
             </summary>
@@ -1526,6 +1623,48 @@
             configuration file.
             </summary>
         </member>
+        <member name="T:Elmah.ServiceProviderQueryHandler">
+            <summary>
+            A delegate to an implementation that returns an <see cref="T:System.IServiceProvider"/>
+            object based on a given context.
+            </summary>
+        </member>
+        <member name="T:Elmah.ServiceCenter">
+            <summary>
+            Central point for locating arbitrary services.
+            </summary>
+        </member>
+        <member name="F:Elmah.ServiceCenter.Default">
+            <summary>
+            The default and factory-supplied implementation of 
+            <see cref="T:Elmah.ServiceProviderQueryHandler"/>.
+            </summary>
+        </member>
+        <member name="M:Elmah.ServiceCenter.FindService(System.Object,System.Type)">
+            <summary>
+            Attempts to locate a service of a given type based on a given context.
+            If the service is not available, a null reference is returned.
+            </summary>
+        </member>
+        <member name="M:Elmah.ServiceCenter.GetService(System.Object,System.Type)">
+            <summary>
+            Gets a service of a given type based on a given context.
+            If the service is not available, an exception is thrown.
+            </summary>
+        </member>
+        <member name="M:Elmah.ServiceCenter.GetServiceProvider(System.Object)">
+            <summary>
+            Gets an <see cref="T:System.IServiceProvider"/> object based on a 
+            supplied context and which can be used to request further
+            services.
+            </summary>
+        </member>
+        <member name="P:Elmah.ServiceCenter.Current">
+            <summary>
+            The current <see cref="T:Elmah.ServiceProviderQueryHandler"/> implementation
+            in effect.
+            </summary>
+        </member>
         <member name="T:Elmah.SimpleServiceProviderFactory">
             <summary>
             A simple factory for creating instances of types specified in a 
@@ -1595,6 +1734,57 @@
         <member name="T:Elmah.SqlErrorLog.AsyncResultWrapper">
             <summary>
             An <see cref="T:System.IAsyncResult"/> implementation that wraps another.
+            </summary>
+        </member>
+        <member name="T:Elmah.SqlServerCompactErrorLog">
+            <summary>
+            An <see cref="T:Elmah.ErrorLog"/> implementation that uses SQL Server 
+            Compact 4 as its backing store.
+            </summary>
+        </member>
+        <member name="M:Elmah.SqlServerCompactErrorLog.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlServerCompactErrorLog"/> class
+            using a dictionary of configured settings.
+            </summary>
+        </member>
+        <member name="M:Elmah.SqlServerCompactErrorLog.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Elmah.SqlServerCompactErrorLog"/> class
+            to use a specific connection string for connecting to the database.
+            </summary>
+        </member>
+        <member name="M:Elmah.SqlServerCompactErrorLog.Log(Elmah.Error)">
+            <summary>
+            Logs an error to the database.
+            </summary>
+            <remarks>
+            Use the stored procedure called by this implementation to set a
+            policy on how long errors are kept in the log. The default
+            implementation stores all errors for an indefinite time.
+            </remarks>
+        </member>
+        <member name="M:Elmah.SqlServerCompactErrorLog.GetErrors(System.Int32,System.Int32,System.Collections.IList)">
+            <summary>
+            Returns a page of errors from the databse in descending order 
+            of logged time.
+            </summary>
+            
+        </member>
+        <member name="M:Elmah.SqlServerCompactErrorLog.GetError(System.String)">
+            <summary>
+            Returns the specified error from the database, or null 
+            if it does not exist.
+            </summary>
+        </member>
+        <member name="P:Elmah.SqlServerCompactErrorLog.Name">
+            <summary>
+            Gets the name of this error log implementation.
+            </summary>
+        </member>
+        <member name="P:Elmah.SqlServerCompactErrorLog.ConnectionString">
+            <summary>
+            Gets the connection string used by the log to connect to the database.
             </summary>
         </member>
         <member name="T:Elmah.StringFormatter">
@@ -1694,55 +1884,6 @@
             with serialized data.
             </summary>
         </member>
-        <member name="T:Elmah.VistaDBErrorLog">
-            <summary>
-            An <see cref="T:Elmah.ErrorLog"/> implementation that uses VistaDB as its backing store.
-            </summary>
-        </member>
-        <member name="M:Elmah.VistaDBErrorLog.#ctor(System.Collections.IDictionary)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Elmah.VistaDBErrorLog"/> class
-            using a dictionary of configured settings.
-            </summary>
-        </member>
-        <member name="M:Elmah.VistaDBErrorLog.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Elmah.VistaDBErrorLog"/> class
-            to use a specific connection string for connecting to the database.
-            </summary>
-        </member>
-        <member name="M:Elmah.VistaDBErrorLog.Log(Elmah.Error)">
-            <summary>
-            Logs an error to the database.
-            </summary>
-            <remarks>
-            Use the stored procedure called by this implementation to set a
-            policy on how long errors are kept in the log. The default
-            implementation stores all errors for an indefinite time.
-            </remarks>
-        </member>
-        <member name="M:Elmah.VistaDBErrorLog.GetErrors(System.Int32,System.Int32,System.Collections.IList)">
-            <summary>
-            Returns a page of errors from the databse in descending order 
-            of logged time.
-            </summary>
-        </member>
-        <member name="M:Elmah.VistaDBErrorLog.GetError(System.String)">
-            <summary>
-            Returns the specified error from the database, or null 
-            if it does not exist.
-            </summary>
-        </member>
-        <member name="P:Elmah.VistaDBErrorLog.Name">
-            <summary>
-            Gets the name of this error log implementation.
-            </summary>
-        </member>
-        <member name="P:Elmah.VistaDBErrorLog.ConnectionString">
-            <summary>
-            Gets the connection string used by the log to connect to the database.
-            </summary>
-        </member>
         <member name="T:Elmah.XmlFileErrorLog">
             <summary>
             An <see cref="T:Elmah.ErrorLog"/> implementation that uses XML files stored on 
@@ -1798,6 +1939,38 @@
             <summary>
             Gets the name of this error log implementation.
             </summary>
+        </member>
+        <member name="T:Elmah.XmlSerializer">
+            <summary>
+            Serializes object to and from XML documents.
+            </summary>
+        </member>
+        <member name="T:Elmah.XmlText">
+            <summary>
+            XML 1.0 services.
+            </summary>
+        </member>
+        <member name="M:Elmah.XmlText.StripIllegalXmlCharacters(System.String)">
+            <summary>
+            Replaces illegal XML characters with a question mark (?).
+            </summary>
+            <remarks>
+            Only strips illegal characters as per XML 1.0, not 1.1. 
+            See section <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#charsets">2.2 Characters</a>
+            of <a href="http://www.w3.org/TR/2006/REC-xml-20060816">Extensible Markup Language (XML) 1.0 (Fourth Edition)</a>.
+            </remarks>
+        </member>
+        <member name="M:Elmah.XmlText.StripIllegalXmlCharacters(System.String,System.String)">
+            <summary>
+            Replaces illegal XML characters with a replacement string,
+            with the default being a question mark (?) if the replacement
+            is null reference.
+            </summary>
+            <remarks>
+            Only strips illegal characters as per XML 1.0, not 1.1. 
+            See section <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#charsets">2.2 Characters</a>
+            of <a href="http://www.w3.org/TR/2006/REC-xml-20060816">Extensible Markup Language (XML) 1.0 (Fourth Edition)</a>.
+            </remarks>
         </member>
     </members>
 </doc>
