@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using Fiddler;
 using Ionic.Zip;
@@ -59,6 +61,16 @@ namespace ElmahFiddler {
                 return true;
             } catch (Exception) {
                 return false;
+            }
+        }
+
+        public static IEnumerable<Session> ReadSessionArchive(string sazFile, string password) {
+            using (var zip = ZipFile.Read(sazFile)) {
+                return zip.Entries
+                    .Where(z => z.FileName.EndsWith("_c.txt"))
+                    .Select(z => z.ExtractWithPasswordToBytes(password))
+                    .Select(request => new Session(request, new byte[0]))
+                    .ToList();
             }
         }
     }
