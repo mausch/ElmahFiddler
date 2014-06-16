@@ -4,6 +4,7 @@ using System.IO;
 namespace ElmahFiddler {
     // Backported from .NET 4.0
     public static class StreamExtensions {
+#if NET35
         public static void CopyTo(this Stream source, Stream destination) {
             if (destination == null) {
                 throw new ArgumentNullException("destination");
@@ -52,7 +53,7 @@ namespace ElmahFiddler {
                 destination.Write(buffer, 0, num);
             }
         }
-
+#endif
         /// <summary>
         /// Fully reads a Stream
         /// </summary>

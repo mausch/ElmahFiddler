@@ -4,3 +4,4 @@
 *.user
 _ReSharper.*
 packages/*
+.nuget/*.exe
