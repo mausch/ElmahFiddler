@@ -5,3 +5,5 @@
 _ReSharper.*
 packages/*
 .nuget/*.exe
+*.nupkg
+*.sln.ide

@@ -1,0 +1,17 @@
+<configuration>
+  <configSections>
+    <sectionGroup name="elmah">
+      <section name="errorMailSaz" requirePermission="false" type="ElmahFiddler.ElmahMailSAZSectionHandler, ElmahFiddler" />
+    </sectionGroup>
+  </configSections>
+  <system.web>
+    <httpModules>
+      <add name="elmahSAZ" type="ElmahFiddler.ElmahMailSAZModule, ElmahFiddler"/>
+    </httpModules>
+  </system.web>
+  <system.webServer>
+    <modules>
+      <add name="elmahSAZ" type="ElmahFiddler.ElmahMailSAZModule, ElmahFiddler" preCondition="managedHandler"/>
+    </modules>
+  </system.webServer>
+</configuration>
