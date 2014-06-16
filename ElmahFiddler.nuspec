@@ -11,7 +11,7 @@
     <copyright>Copyright 2010-2014 Mauricio Scheffer</copyright>
     <tags>elmah error logging</tags>
     <dependencies>
-        <dependency id="elmah.corelibrary" version="[1.2.2]" />
+        <dependency id="elmah" version="[1.2.2]" />
         <dependency id="FiddlerCore" version="[4.4.8.4]" />
         <dependency id="DotNetZip.Reduced" version="[1.9.1.8]" />
     </dependencies>

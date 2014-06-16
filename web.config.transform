@@ -1,7 +1,7 @@
 <configuration>
   <configSections>
     <sectionGroup name="elmah">
-      <section name="errorMailSaz" requirePermission="false" type="ElmahFiddler.ElmahMailSAZSectionHandler, ElmahFiddler" />
+      <section name="errorMailSAZ" requirePermission="false" type="ElmahFiddler.ElmahMailSAZSectionHandler, ElmahFiddler" />
     </sectionGroup>
   </configSections>
   <system.web>
@@ -14,4 +14,34 @@
       <add name="elmahSAZ" type="ElmahFiddler.ElmahMailSAZModule, ElmahFiddler" preCondition="managedHandler"/>
     </modules>
   </system.webServer>
+  <elmah>
+    <errorMailSAZ>
+      <!-- Rename host in SAZ requests -->
+      <!--renameHost>localhost</renameHost-->
+
+      <!-- Keep only the last N requests before the error. Only used by ElmahMailSAZTraceModule -->
+      <!--keepLastNRequests>3</keepLastNRequests-->
+
+      <!-- Password for SAZ file -->
+      <!--password>the_password_goes_here</password-->
+
+      <!-- List of URL path and query regexes to exclude from SAZ -->
+      <!--exclude>
+        <url>super_secret.aspx</url>
+      </exclude-->
+    </errorMailSAZ>
+
+    <!-- To configure this section see: https://code.google.com/p/elmah/wiki/DotNetSlackersArticle#Configuring_error_notifications -->
+    <!-- Note that ElmahSAZ requires async=false -->
+    <!--errorMail
+      from="pepe@gmail.com"
+      to="pepe@gmail.com"
+      subject="ERROR From Elmah:"
+      async="false"
+      smtpPort="587"
+      useSsl="true"
+      smtpServer="smtp.gmail.com"
+      userName="pepe@gmail.com"
+      password="pepe" /-->
+  </elmah>
 </configuration>
